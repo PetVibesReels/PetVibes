@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>PetVibes Donation</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body {
+      margin: 0;
+      font-family: "Poppins", "Cairo", sans-serif;
+      background-color: #f9f9f4;
+      background-image: url('https://i.imgur.com/xkFoh4T.png');
+      background-repeat: repeat;
+      background-size: 200px;
+      color: #333;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+    }
+    .card {
+      background: #fff;
+      padding: 2.5rem;
+      border-radius: 20px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+      max-width: 550px;
+      width: 90%;
+    }
+    h1, h2 {
+      text-align: center;
+      color: #264e36;
+    }
+    h1 {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+    h2 {
+      margin-top: 0;
+      font-size: 2rem;
+    }
+    label {
+      display: block;
+      margin: 0.8rem 0 0.3rem;
+      font-weight: 600;
+    }
+    input[type="text"],
+    input[type="number"],
+    input[type="file"] {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 1rem;
+      box-sizing: border-box;
+    }
+    button {
+      background-color: #0070ba;
+      color: #fff;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 10px;
+      font-size: 1rem;
+      cursor: pointer;
+      width: 100%;
+      transition: 0.3s ease;
+    }
+    button:hover {
+      background-color: #005c97;
+    }
+    #paypal-buttons {
+      margin-top: 1rem;
+    }
+    p {
+      line-height: 1.5;
+      color: #444;
+    }
+    .footer {
+      text-align: center;
+      font-size: 0.9rem;
+      color: #666;
+      margin-top: 1.5rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <h2>🐾 PetVibes</h2>
+    <h1>Thanks to you, we’ve rescued over <strong>1,500</strong> homeless animals 💚</h1>
+
+    <form id="donation-form">
+
+      <label>Pet’s Name</label>
+      <input type="text" name="pet_name" placeholder="e.g. Bella" required>
+
+      <label>Instagram Username</label>
+      <input type="text" name="username" placeholder="Your username" required>
+
+      <label>Upload your pet’s photo</label>
+      <input type="file" name="pet_photo" accept="image/*">
+
+      <label>Your favorite music</label>
+      <input type="text" name="favorite_music" placeholder="e.g. Happy tunes">
+
+      <label>City or Location</label>
+      <input type="text" name="location" placeholder="e.g. Amman, Jordan">
+
+      <h2 style="font-size:1.3rem; margin-top:1.5rem;">Create a reel for your pet… and donate to save another!</h2>
+
+      <p>Donation section (via PayPal):</p>
+
+      <label>Donation amount (USD)</label>
+      <input type="number" id="donation-amount" name="donation_amount" step="0.01" min="1" value="13.00">
+
+      <div id="paypal-buttons"></div>
+    </form>
+
+    <div class="footer">
+      🐾 Every dollar helps us rescue, feed, and care for more animals. Thank you for your kindness!
+    </div>
+  </div>
+
+  <script src="https://www.paypal.com/sdk/js?client-id=BAAqFBJEFBE1uOfU5Ur5lGCvvDtDvh8rHzfEw44mFeSi-yBPrgg9EHylOB8VV1M0roL7gIgVdx1_ePXEsE&currency=USD"></script>
+
+  <script>
+    paypal.Buttons({
+      createOrder: function(data, actions) {
+        const amount = document.getElementById('donation-amount').value || '27.00';
+        return actions.order.create({
+          purchase_units: [{
+            description: 'PetVibes Donation',
+            amount: { value: amount }
+          }]
+        });
+      },
+      onApprove: function(data, actions) {
+        return actions.order.capture().then(function(details) {
+          alert('شكراً ' + details.payer.name.given_name + '! تم استلام تبرعك بنجاح 🎉');
+          document.getElementById('donation-form').reset();
+        });
+      },
+      onError: function(err) {
+        console.error(err);
+        alert('حدث خطأ أثناء معالجة الدفع. الرجاء المحاولة مرة أخرى.');
+      }
+    }).render('#paypal-buttons');
+  </script>
+
+</body>
+</html>
